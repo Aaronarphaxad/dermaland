@@ -1,20 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "./firebase";
+import "react-native-url-polyfill/auto";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import RootNavigation from "./navigation";
+import { useFonts } from "expo-font";
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  const [fontsLoaded] = useFonts({
+    "Poppings-Bold": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
+    "Poppings-Black": require("./assets/fonts/Poppins/Poppins-Bold.ttf"),
+    "Poppings-Light": require("./assets/fonts/Poppins/Poppins-Light.ttf"),
+    "Poppings-ExtraBold": require("./assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
+  });
+  return <RootNavigation />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
