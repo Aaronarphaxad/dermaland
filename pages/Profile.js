@@ -3,7 +3,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
+  RefreshControl,
   View,
   Alert,
 } from "react-native";
@@ -18,8 +18,10 @@ export const ProfilePage = () => {
   const user = auth.currentUser;
   const { email, displayName, photoURL } = user;
   const [username, setUsername] = useState(displayName);
+  const [avatar, setAvatar] = useState(photoURL);
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
+  const [loading, setLoading] = useState(false);
   const profileRef = doc(db, "profiles", `${user?.uid}`);
 
   const toggleOverlay = () => {
@@ -27,6 +29,19 @@ export const ProfilePage = () => {
   };
   const toggleDialog = () => {
     setVisible2(!visible2);
+  };
+
+  const handleRefresh = async () => {
+    setLoading(true);
+    await user
+      .reload()
+      .then(() => {
+        user = auth.currentUser;
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   const handleLogout = () => {
@@ -53,29 +68,34 @@ export const ProfilePage = () => {
     <View style={styles.scrollView}>
       <ScrollView
         contentContainerStyle={{
-          flexGrow: 1,
+          // flexGrow: 1,
           alignItems: "center",
-          maxHeight: 1000,
+          maxHeight: 2500,
+          paddingBottom: 20,
         }}
         style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={handleRefresh} />
+        }
       >
         <UpdateProfileModal
           visible={visible}
           setVisible={setVisible}
           toggleOverlay={toggleOverlay}
           setUser={setUsername}
+          setAvatar={setAvatar}
         />
         <DeleteUserModal
           visible={visible2}
           toggleDialog={toggleDialog}
           deleteUser={handleDeleteUser}
         />
-        {photoURL ? (
+        {avatar ? (
           <Avatar
             size={114}
             rounded
             source={{
-              uri: photoURL,
+              uri: avatar,
             }}
           />
         ) : (
@@ -151,8 +171,9 @@ const styles = StyleSheet.create({
   scrollView: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#fff",
+    backgroundColor: "#EADDD3",
     paddingTop: 20,
+    paddingBottom: 10,
   },
   container: {
     paddingTop: 20,

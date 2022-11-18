@@ -26,15 +26,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-    color: "rgba(255, 255, 255, 0.8)",
+    color: "rgba(255, 255, 255, 1)",
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Poppings-Light",
   },
   title: {
     fontSize: 30,
     color: "white",
     textAlign: "center",
+    fontFamily: "Poppings-Bold",
   },
   paginationContainer: {
     position: "absolute",
@@ -70,6 +72,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
     textAlign: "center",
+    fontFamily: "Poppings-Bold",
   },
 });
 

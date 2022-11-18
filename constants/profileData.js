@@ -9,4 +9,6 @@ export const profileData = {
   sensitive: false,
   skin_type: "Normal",
   streak: [],
+  notificationId_morning: "",
+  notificationId_night: "",
 };

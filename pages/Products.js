@@ -13,7 +13,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { auth, db, doc, updateDoc } from "../firebase";
 
 LogBox.ignoreLogs([
-  "Non-serializable values were found in the navigation state",
+  "Non-serializable values were found in the navigation state.",
 ]);
 
 export default function ProductsPage({ route, navigation }) {
@@ -22,15 +22,22 @@ export default function ProductsPage({ route, navigation }) {
   const [productListNight, setProductListN] = useState([]);
   const [inputValueM, setInputValueM] = useState("");
   const [inputValueN, setInputValueN] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [canUpdateM, setCanUpdateM] = useState(true);
+  const [canUpdateN, setCanUpdateN] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(1);
   const inputRef = useRef();
   const inputRef2 = useRef();
   const profileRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
 
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state",
+  ]);
+
   useEffect(() => {
     setProductListM(productsMorning);
     setProductListN(productsNight);
+    setLoading(false);
   }, []);
 
   // Update products list
@@ -45,6 +52,7 @@ export default function ProductsPage({ route, navigation }) {
         await updateDoc(profileRef, {
           products_morning: productListMorning,
         });
+        setCanUpdateM(true);
       }
       if (time === "night") {
         if (productListNight.toString() === productsNight.toString()) {
@@ -55,6 +63,7 @@ export default function ProductsPage({ route, navigation }) {
         await updateDoc(profileRef, {
           products_night: productListNight,
         });
+        setCanUpdateN(true);
       }
       getUserProfile();
       Alert.alert("Products updated!");
@@ -70,12 +79,14 @@ export default function ProductsPage({ route, navigation }) {
     setProductListM((prev) => [...prev, inputValueM]);
     // getUserProfile();
     inputRef.current.clear();
+    setCanUpdateM(false);
   };
   const handleAddProductsN = () => {
     if (!inputValueN) return;
     setProductListN((prev) => [...prev, inputValueN]);
     // getUserProfile();
     inputRef2.current.clear();
+    setCanUpdateN(false);
   };
 
   const removeItem = (i, l, time) => {
@@ -83,14 +94,14 @@ export default function ProductsPage({ route, navigation }) {
       setProductListM(
         productListMorning.filter((item) => item !== productListMorning[i])
       );
-      console.log("clicked", i);
+      setCanUpdateM(false);
       Alert.alert(`Removed item ${l}`);
     }
     if (time === "night") {
       setProductListN(
         productListNight.filter((item) => item !== productListNight[i])
       );
-      console.log("clicked", i);
+      setCanUpdateN(false);
       Alert.alert(`Removed item ${l}`);
     }
   };
@@ -142,7 +153,7 @@ export default function ProductsPage({ route, navigation }) {
             </>
           ) : (
             <>
-              <ScrollView style={{ maxHeight: 250, marginBottom: 10 }}>
+              <ScrollView style={{ maxHeight: 300, marginBottom: 10 }}>
                 {productListMorning?.map((l, i) => (
                   <ListItem.Swipeable
                     rightContent={(reset) => (
@@ -204,6 +215,7 @@ export default function ProductsPage({ route, navigation }) {
             titleStyle={{
               fontFamily: "Poppings-Bold",
             }}
+            disabled={canUpdateM}
           />
         </>
       )}
@@ -225,7 +237,7 @@ export default function ProductsPage({ route, navigation }) {
             </>
           ) : (
             <>
-              <ScrollView style={{ maxHeight: 250, marginBottom: 10 }}>
+              <ScrollView style={{ maxHeight: 300, marginBottom: 10 }}>
                 {productListNight?.map((l, i) => (
                   <ListItem.Swipeable
                     rightContent={(reset) => (
@@ -286,6 +298,7 @@ export default function ProductsPage({ route, navigation }) {
             titleStyle={{
               fontFamily: "Poppings-Bold",
             }}
+            disabled={canUpdateN}
           />
         </>
       )}
@@ -298,7 +311,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     padding: 10,
-    marginTop: 30,
+    paddingTop: 30,
+    backgroundColor: "#EADDD3",
   },
   row: {
     display: "flex",

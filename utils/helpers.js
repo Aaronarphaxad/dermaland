@@ -27,3 +27,28 @@ export const getRandomImg = () => {
   var item = items[Math.floor(Math.random() * items.length)];
   return item;
 };
+
+export const getHoursMinutes = (str) => {
+  const [time, period] = str.split(" ");
+  let [first, second] = time.split(":");
+
+  let hour;
+  let minutes;
+
+  if (first === "12" && period === "AM") {
+    hour = "0";
+  } else {
+    hour = first;
+  }
+
+  if (period === "PM" && first !== "12") {
+    hour = parseInt(first) + 12;
+  }
+  minutes = second;
+
+  return {
+    format: [first, second, period],
+    hour: parseInt(hour),
+    minutes: parseInt(minutes),
+  };
+};

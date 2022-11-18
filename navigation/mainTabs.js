@@ -10,7 +10,13 @@ const Tab = createBottomTabNavigator();
 export function HomeTabs() {
   return (
     <>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: "#EADDD3",
+          },
+        }}
+      >
         <Tab.Screen
           name="Dashboard"
           component={HomePage}
@@ -18,7 +24,7 @@ export function HomeTabs() {
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
                 name={focused ? "home" : "home-outline"}
-                color={focused ? "#59b2ab" : "grey"}
+                color={focused ? "#59b2ab" : "#fff"}
                 size={35}
               />
             ),
@@ -33,7 +39,7 @@ export function HomeTabs() {
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
                 name={focused ? "book" : "book-outline"}
-                color={focused ? "#59b2ab" : "grey"}
+                color={focused ? "#59b2ab" : "#fff"}
                 size={30}
               />
             ),
@@ -48,7 +54,7 @@ export function HomeTabs() {
             tabBarIcon: ({ color, size, focused }) => (
               <MaterialCommunityIcons
                 name={focused ? "account" : "account-outline"}
-                color={focused ? "#59b2ab" : "grey"}
+                color={focused ? "#59b2ab" : "#fff"}
                 size={35}
               />
             ),

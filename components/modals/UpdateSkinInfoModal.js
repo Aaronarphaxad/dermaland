@@ -1,37 +1,27 @@
-import { View, Text, Alert, StyleSheet } from "react-native";
+import { View, Text, Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import SelectDropdown from "react-native-select-dropdown";
 import { Button, Overlay, Icon, Input, CheckBox } from "@rneui/themed";
 import { auth, db, doc, updateDoc } from "../../firebase";
 import Spinner from "react-native-loading-spinner-overlay";
+import productsGenerator from "../../utils/productGenerator";
 
 const types = ["Dry", "Normal", "Oily"];
 
-export default function UpdateSkinInfoModal({
-  visible,
-  toggleOverlay,
-  skinType,
-  sensitive,
-  acne,
-  pigmentation,
-}) {
-  const [check1, setCheck1] = useState(skinType || "Dry");
-  const [check2, setCheck2] = useState(sensitive);
-  const [check3, setCheck3] = useState(acne);
-  const [check4, setCheck4] = useState(pigmentation);
+export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
+  const [check1, setCheck1] = useState("Normal");
+  const [check2, setCheck2] = useState(false);
+  const [check3, setCheck3] = useState(false);
+  const [check4, setCheck4] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const profileRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
-
-  useEffect(() => {
-    setCheck1(skinType);
-  }, []);
 
   const handleUpdate = async () => {
     setLoading(true);
     try {
       await updateDoc(profileRef, {
-        skin_type: check1 || "Dry",
+        skin_type: check1 === "N/A" ? "Normal" : check1,
         sensitive: check2,
         acne: check3,
         hyperpigmentation: check4,
@@ -45,9 +35,47 @@ export default function UpdateSkinInfoModal({
     }
   };
 
+  const handleRecommend = () => {
+    setLoading(true);
+    let obj = {
+      type: check1 ? check1 : "Normal",
+      sensitive: check2 === true || false ? check2 : false,
+      acne: check3 === true || false ? check3 : false,
+      pigmentation: check4 === true || false ? check4 : false,
+    };
+    // console.log(obj);
+    console.log(productsGenerator(obj));
+    let generatedProducts = productsGenerator(obj);
+    let morning = generatedProducts?.morning;
+    let night = generatedProducts?.night;
+    try {
+      updateDoc(profileRef, {
+        skin_type: check1 === "N/A" ? "Normal" : check1,
+        sensitive: check2 === true || false ? check2 : false,
+        acne: check3 === true || false ? check3 : false,
+        hyperpigmentation: check4 === true || false ? check4 : false,
+        products_morning: morning,
+        products_night: night,
+      })
+        .then(() => {
+          setLoading(false);
+          toggleOverlay();
+          Alert.alert("Recommended products added to products list");
+        })
+        .catch((error) => {
+          setLoading(false);
+          Alert.alert(error.message);
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
     <Overlay
-      overlayStyle={{ width: "90%" }}
+      overlayStyle={{ width: "90%", borderRadius: 10 }}
       isVisible={visible}
       onBackdropPress={toggleOverlay}
     >
@@ -106,6 +134,9 @@ export default function UpdateSkinInfoModal({
         onPress={() => handleUpdate()}
         title="Update"
       />
+      <TouchableOpacity onPress={handleRecommend} style={styles.recommend}>
+        <Text style={styles.recommendText}>Get product recommendation</Text>
+      </TouchableOpacity>
     </Overlay>
   );
 }
@@ -116,5 +147,14 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Poppings-Light",
+  },
+  recommend: {
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  recommendText: {
+    fontFamily: "Poppings-Bold",
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });

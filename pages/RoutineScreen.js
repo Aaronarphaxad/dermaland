@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  LogBox,
 } from "react-native";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { auth, db, doc, getDoc } from "../firebase";
@@ -12,15 +13,21 @@ import { Button, Icon, ListItem } from "@rneui/themed";
 import { SelectedProduct } from "../components/SelectedProducts";
 import Spinner from "react-native-loading-spinner-overlay";
 import { getRandomImg } from "../utils/helpers";
-import moment from "moment";
 
-export default function RoutineScreen({ navigation, route }) {
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
+
+export default function RoutineScreen({ navigation }) {
   const [index, setIndex] = useState(1);
   const [profile, setProfile] = useState(null);
   const [morning, setMorning] = useState([]);
   const [night, setNight] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { reload, setReload } = route.params;
+
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state",
+  ]);
 
   const profileInfo = useMemo(() => {
     return {
@@ -85,8 +92,6 @@ export default function RoutineScreen({ navigation, route }) {
         products: morning,
         imageUrl: profileInfo?.getImage(),
         setProducts: setMorning,
-        reload: reload,
-        setReload: setReload,
       });
     }
     if (index === 2) {
@@ -110,10 +115,8 @@ export default function RoutineScreen({ navigation, route }) {
       const docSnap = await getDoc(docRef);
       const data = docSnap.data()?.streak;
       if (data.length > 0) {
-        setStreak(data.map((item) => item.toDate()));
       } else {
         // setStreak(docSnap.data()?.streak[0].toDate());
-        setStreak(data);
       }
       if (docSnap.exists()) {
         // console.log("Document streak:", docSnap.data()?.streak);
@@ -155,11 +158,11 @@ export default function RoutineScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <Text style={{ marginTop: 10, marginBottom: 10 }}>
-        Select products for routine:
+        Click + to select products for routine:
       </Text>
       {index === 1 && (
         <>
-          <ScrollView style={{ maxHeight: 200, marginBottom: 15 }}>
+          <ScrollView style={{ maxHeight: 220, marginBottom: 15 }}>
             {profileInfo?.productsMorning.map((item, i) => (
               <ListItem key={i} bottomDivider>
                 <ListItem.Content>
@@ -193,7 +196,7 @@ export default function RoutineScreen({ navigation, route }) {
       )}
       {index === 2 && (
         <>
-          <ScrollView style={{ maxHeight: 200, marginBottom: 15 }}>
+          <ScrollView style={{ maxHeight: 220, marginBottom: 15 }}>
             {profileInfo?.productsNight.map((item, i) => (
               <ListItem key={i} bottomDivider>
                 <ListItem.Content>
@@ -247,8 +250,10 @@ export default function RoutineScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    paddingTop: 40,
     padding: 10,
+    backgroundColor: "#EADDD3",
+    flex: 1,
   },
   row: {
     display: "flex",

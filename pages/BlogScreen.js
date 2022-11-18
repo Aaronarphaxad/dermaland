@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { A } from "@expo/html-elements";
 
 export const BlogScreen = ({ route }) => {
   const { product, text, text2, link, image } = route.params;
@@ -6,6 +7,13 @@ export const BlogScreen = ({ route }) => {
     <View style={styles.container}>
       <Image source={{ uri: image }} style={styles.image} />
       <Text style={styles.title}>{product}</Text>
+      {/* {link && <Text style={styles.link}>Learn more: {link}</Text>} */}
+      {link && (
+        <A style={styles.link} href={link}>
+          Learn more
+        </A>
+      )}
+
       <ScrollView style={{ maxHeight: 600 }}>
         <Text style={styles.text}>{text}</Text>
         {text2 && <Text style={styles.text}>{text2}</Text>}
@@ -26,7 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: "Poppings-Bold",
     textAlign: "center",
-    margin: 20,
+    marginTop: 10,
   },
   text: {
     textAlign: "justify",
@@ -41,5 +49,10 @@ const styles = StyleSheet.create({
     height: 150,
     resizeMode: "contain",
     marginTop: 10,
+  },
+  link: {
+    textDecorationLine: "underline",
+    color: "#725DC0",
+    marginBottom: 10,
   },
 });

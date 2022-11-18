@@ -26,19 +26,20 @@ const TimePicker = ({
           width: 50,
         }}
         titleStyle={{
-          color: "#000",
-          fontFamily: "Poppings-Bold",
+          color: "#fff",
+          fontFamily: "Poppings-Light",
+          fontWeight: "600",
           fontSize: 14,
           marginRight: 5,
           textDecorationLine: "underline",
         }}
       >
         Set
-        <MaterialCommunityIcons
+        {/* <MaterialCommunityIcons
           name="timer-settings"
-          color={"#000"}
+          color={"#fff"}
           size={20}
-        />
+        /> */}
       </Button>
       <DateTimePickerModal
         isVisible={isDatePickerVisible}

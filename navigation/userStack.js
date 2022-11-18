@@ -8,6 +8,7 @@ import ProductsPage from "../pages/Products";
 import RoutineScreen from "../pages/RoutineScreen";
 import { RoutineTimer } from "../pages/RoutineTimer";
 import { BlogScreen } from "../pages/BlogScreen";
+import { StreakScreen } from "../pages/Streak";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,11 @@ export default function UserStack() {
           name="Blog"
           // options={{ headerShown: false }}
           component={BlogScreen}
+        />
+        <Stack.Screen
+          name="Streak"
+          // options={{ headerShown: false }}
+          component={StreakScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,6 +1,6 @@
-import { Button, Overlay, Icon, CheckBox, Alert } from "@rneui/themed";
+import { Button, Overlay, Icon, CheckBox } from "@rneui/themed";
 import SelectDropdown from "react-native-select-dropdown";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import Spinner from "react-native-loading-spinner-overlay";
 import productsGenerator from "../../utils/productGenerator";
@@ -23,8 +23,6 @@ export default function RecommendModal({
   const [loading, setLoading] = useState(false);
 
   const profileRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
-  // console.log(check1, check2, check3, check4);
-  // console.log(skinData);
 
   useEffect(() => {
     setCheck1(skinData?.skinType);
@@ -36,26 +34,27 @@ export default function RecommendModal({
   const handleRecommend = () => {
     setLoading(true);
     let obj = {
-      type: check1,
-      sensitive: check2,
-      acne: check3,
-      pigmentation: check4,
+      type: check1 ? check1 : "Normal",
+      sensitive: check2 === true || false ? check2 : false,
+      acne: check3 === true || false ? check3 : false,
+      pigmentation: check4 === true || false ? check4 : false,
     };
     let generatedProducts = productsGenerator(obj);
     let morning = generatedProducts?.morning;
     let night = generatedProducts?.night;
     try {
       updateDoc(profileRef, {
-        skin_type: check1,
-        sensitive: check2,
-        acne: check3,
-        hyperpigmentation: check4,
+        skin_type: check1 ? check1 : "Normal",
+        sensitive: check2 === true || false ? check2 : false,
+        acne: check3 === true || false ? check3 : false,
+        hyperpigmentation: check4 === true || false ? check4 : false,
         products_morning: morning,
         products_night: night,
       })
         .then(() => {
           setLoading(false);
           toggleOverlay();
+          Alert.alert("Recommended products added to products list");
           setReload(!reload);
           goHome();
         })
@@ -87,8 +86,8 @@ export default function RecommendModal({
           style={{ marginBottom: 10 }}
         />
         <Text style={styles.textSecondary}>
-          Looks like you have no routine products. Get recommendations based on
-          skin information:
+          Looks like you have no routine products. Select skin information below
+          to get products recommendation:
         </Text>
         <SelectDropdown
           data={types}

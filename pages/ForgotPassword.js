@@ -7,20 +7,19 @@ import {
   Alert,
 } from "react-native";
 import { Input } from "@rneui/themed";
-import logo from "../assets/logo-sample.png";
 import { useState } from "react";
 import { auth, sendResetPassword } from "../firebase";
 
 export const ForgotPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const resetPassword = () => {
     setLoading(true);
     sendResetPassword(auth, email)
       .then(() => {
         setLoading(false);
-        Alert.alert("Password reset email sent!");
+        Alert.alert("Password reset email sent! (also check spam)");
       })
       .catch((error) => {
         setLoading(false);
@@ -32,8 +31,10 @@ export const ForgotPassword = ({ navigation }) => {
   return (
     <View style={styles.containerMain}>
       <View style={styles.topView}>
-        <Text style={{ color: "#007AFF", fontWeight: "bold" }}>Dermaland</Text>
-        <Image source={logo} />
+        <Image
+          source={require("../assets/derma_auth.png")}
+          style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+        />
       </View>
       <View style={styles.container}>
         <Text style={styles.header}>Change your password</Text>

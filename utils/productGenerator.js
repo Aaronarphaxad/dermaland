@@ -15,6 +15,7 @@ let drySkinPigmentation = {
     "Niacinamide",
     "Sunscreen SPF30+",
     "Vitamin C",
+    "Moisturiser",
   ],
   night: [
     "Cleanser",
@@ -139,7 +140,14 @@ let sensitiveSkin = {
 };
 
 export default function productsGenerator(productInfo) {
-  const { type, sensitive, acne, pigmentation } = productInfo;
+  let { type, sensitive, acne, pigmentation } = productInfo;
+
+  if (!type) {
+    type = "Normal";
+  }
+  if (type === "N/A") {
+    type === "Normal";
+  }
   if (sensitive) {
     return sensitiveSkin;
   }
@@ -161,7 +169,7 @@ export default function productsGenerator(productInfo) {
     }
     return oilySkinPlain;
   }
-  if (type === "Normal") {
+  if (type === "Normal" || "N/A") {
     if (acne) {
       return normalSkinAcne;
     }

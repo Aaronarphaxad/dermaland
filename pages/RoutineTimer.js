@@ -7,12 +7,16 @@ import {
   ImageBackground,
   Alert,
   Platform,
+  LogBox,
 } from "react-native";
 import { useState, useEffect, useRef } from "react";
 import { CircleTimer } from "../components/CircleTimer";
 import { auth, db, doc, getDoc, updateDoc } from "../firebase";
-import moment from "moment";
-import { summary } from "date-streaks";
+// import { summary } from "date-streaks";
+
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state.",
+]);
 
 export const RoutineTimer = ({ route, navigation }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -20,14 +24,13 @@ export const RoutineTimer = ({ route, navigation }) => {
   const [next, setNext] = useState(playing + 1);
   const [streak, setStreak] = useState([]);
   const [isRoutineDone, setRoutine] = useState();
-  const { imageUrl, products, setProducts, reload, setReload } = route.params;
+  const { imageUrl, products, setProducts } = route.params;
 
   const profileRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
 
-  console.log(isRoutineDone);
-  console.log("summary of streak", summary(streak));
-  // console.log("is routine done?: ", isRoutineDone);
-  // console.log(moment(streak.slice(-1).pop()).isSame(new Date(), "date"));
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state.",
+  ]);
 
   useEffect(() => {
     getStreak();
@@ -44,7 +47,6 @@ export const RoutineTimer = ({ route, navigation }) => {
     }
     if (isRoutineDone) {
       Alert.alert("Routine completed");
-      setReload(!reload);
       setProducts([]);
       return { shouldRepeat: false };
     }
@@ -53,7 +55,6 @@ export const RoutineTimer = ({ route, navigation }) => {
     })
       .then((data) => {
         Alert.alert("Routine completed. Streak + 1");
-        setReload(!reload);
         setProducts([]);
       })
       .catch((error) => {
@@ -71,15 +72,8 @@ export const RoutineTimer = ({ route, navigation }) => {
       const data = docSnap.data()?.streak;
       if (data.length > 0) {
         setStreak(data);
-        // Get the last date and check if it's done the same day
-        const lastRoutine = streak.slice(-1).pop();
-
-        setRoutine(
-          moment(lastRoutine).isSame(
-            new Date().toLocaleDateString("en-US"),
-            "date"
-          )
-        );
+        // Check if routin has been done today
+        setRoutine(data?.includes(new Date().toLocaleDateString("en-US")));
       } else {
         setStreak(data);
         setRoutine(false);
@@ -183,7 +177,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: 10,
     elevation: Platform.OS === "android" ? 10 : 0,
-    paddingBottom: 30,
+    paddingBottom: 20,
   },
   playView: {
     backgroundColor: "#FD5655",
@@ -198,7 +192,7 @@ const styles = StyleSheet.create({
     right: 50,
   },
   header: {
-    marginTop: 40,
+    marginTop: 30,
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,

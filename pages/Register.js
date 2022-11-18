@@ -9,7 +9,6 @@ import {
   Alert,
 } from "react-native";
 import { Button, Input } from "@rneui/themed";
-import logo from "../assets/logo-sample.png";
 import { useState } from "react";
 import {
   auth,
@@ -110,8 +109,10 @@ export const RegisterPage = ({ navigation }) => {
         style={styles.containerMain}
       >
         <View style={styles.topView}>
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>Dermaland</Text>
-          <Image source={logo} />
+          <Image
+            source={require("../assets/derma_auth.png")}
+            style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+          />
         </View>
         <View style={styles.container}>
           <Text style={styles.header}>Hi, let’s get you set up 🤩</Text>
@@ -146,9 +147,7 @@ export const RegisterPage = ({ navigation }) => {
             autoCapitalize={"none"}
             placeholder="Confirm Password"
           />
-          <TouchableOpacity onPress={() => setCreate(1)}>
-            <Text style={styles.forgotPassword}>Forgot password?</Text>
-          </TouchableOpacity>
+
           <View
             style={{ width: "100%", display: "flex", alignItems: "center" }}
           >

@@ -5,24 +5,19 @@ import { auth, updateUserProfile } from "../../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native";
 
-export const UpdateProfileModal = ({ visible, toggleOverlay, setUser }) => {
+export const UpdateProfileModal = ({
+  visible,
+  toggleOverlay,
+  setUser,
+  setAvatar,
+}) => {
   const user = auth.currentUser;
   const { email, displayName, photoURL } = user;
   const [username, setUsername] = useState(displayName);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(photoURL);
   const [status, requestPermission] = ImagePicker.useCameraPermissions();
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
-
-  let objWithImage = {
-    displayName: username,
-    photoURL: image,
-  };
-  let objWithoutImage = {
-    displayName: username,
-  };
-
-  let uploadObj = image ? objWithImage : objWithoutImage;
 
   let photo;
   if (!photoURL) {
@@ -47,8 +42,8 @@ export const UpdateProfileModal = ({ visible, toggleOverlay, setUser }) => {
       });
       if (!result.canceled) {
         // setImage(result.uri);
-        // console.log(result.base64);
-        let base64Img = `data:image/jpg;base64,${result.base64}`;
+        // console.log(result.assets[0].base64);
+        let base64Img = `data:image/jpg;base64,${result.assets[0].base64}`;
         setPreview(base64Img);
       }
     }
@@ -75,27 +70,43 @@ export const UpdateProfileModal = ({ visible, toggleOverlay, setUser }) => {
     })
       .then(async (r) => {
         let data = await r.json();
-        // console.log("URL TO SAVE", data.secure_url);
-        setImage(data.secure_url);
 
+        let objWithImage = {
+          displayName: username,
+          photoURL: data.secure_url,
+        };
+        let objWithoutImage = {
+          displayName: username,
+        };
+
+        let uploadObj = data ? objWithImage : objWithoutImage;
+        updateUserProfile(auth.currentUser, uploadObj)
+          .then(() => {
+            // Profile updated!
+            Alert.alert("Profile updated!");
+            user.reload().then(() => {
+              setUsername(auth?.currentUser?.displayName);
+            });
+            console.log("URL TO SAVE", data.secure_url);
+            setImage(data.secure_url);
+            setAvatar(data.secure_url);
+            setPreview("");
+            setLoading(false);
+            toggleOverlay();
+          })
+          .catch((error) => {
+            // An error occurred
+            const errorMessage = error.message;
+            Alert.alert(errorMessage);
+            console.log(errorMessage);
+            setLoading(false);
+          });
         return data;
       })
-      .catch((err) => console.log(err));
-    updateUserProfile(auth.currentUser, uploadObj)
-      .then(() => {
-        // Profile updated!
-        Alert.alert("Profile updated!");
-        user.reload().then(() => {
-          setUsername(auth?.currentUser?.displayName);
-        });
+      .catch((err) => {
+        Alert.alert(err);
         setLoading(false);
-        toggleOverlay();
-      })
-      .catch((error) => {
-        // An error occurred
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        setLoading(false);
+        console.log(err);
       });
   };
   return (
@@ -105,7 +116,7 @@ export const UpdateProfileModal = ({ visible, toggleOverlay, setUser }) => {
         isVisible={visible}
         onBackdropPress={toggleOverlay}
       >
-        <Text style={styles.textSecondary}>Update Profile Info</Text>
+        <Text style={styles.textSecondary}>Edit Profile</Text>
         <View>
           <TouchableOpacity onPress={() => pickImage()}>
             {preview ? (
@@ -156,6 +167,7 @@ export const UpdateProfileModal = ({ visible, toggleOverlay, setUser }) => {
           title="Update"
           titleStyle={{ fontFamily: "Poppings-Bold" }}
           disabled={loading}
+          loading={loading}
           loadingProps={{
             size: "small",
             color: "rgba(111, 202, 186, 1)",

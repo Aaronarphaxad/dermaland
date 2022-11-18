@@ -15,6 +15,6 @@ export const introData = [
     title: "Learn",
     text: "Learn more about your skin",
     image: require("../assets/learn.jpg"),
-    bg: "#bdbaae",
+    bg: "rgba(253, 86, 85, 0.7)",
   },
 ];

@@ -14,7 +14,7 @@ export default function HomeCard({
           onPress={pressEvent}
           style={[
             styles.container,
-            // styles.shadowProp,
+            styles.shadowProp2,
             {
               height: height ? height : 120,
               width: half ? "47%" : "100%",
@@ -62,5 +62,16 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 3,
+  },
+  shadowProp2: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 0.84,
+
+    elevation: 2,
   },
 });

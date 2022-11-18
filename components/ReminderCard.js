@@ -1,12 +1,16 @@
 import { View, StyleSheet, Text, Switch, Alert } from "react-native";
 import HomeCard from "./Card";
-// import { Switch } from "@rneui/themed";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { auth, db, doc, updateDoc, getDoc } from "../firebase";
 import TimePicker from "./TimePicker";
 import Spinner from "react-native-loading-spinner-overlay";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { convertMsToTime } from "../utils/helpers";
+import {
+  cancelAllNotifications,
+  schedulePushNotification,
+} from "../utils/Notification";
+import { getHoursMinutes } from "../utils/helpers";
+import { summary } from "date-streaks";
 
 export default function ReminderCard() {
   /**
@@ -17,8 +21,13 @@ export default function ReminderCard() {
     evening: false,
   });
   const [loading, setLoading] = useState(false);
+  // const [morningId, setMorningId] = useState(null);
+  // const [nightId, setNightId] = useState(null);
   // get the reminder data from firebase
   const [profileData, setProfileData] = useState(null);
+
+  // console.log("morning id", morningId);
+  // console.log("night id", nightId);
 
   /**
    * USE MEMO
@@ -39,7 +48,6 @@ export default function ReminderCard() {
     await updateDoc(profileRef, {
       reminder: !profileInfo.checked,
     });
-    // this is not needed
     getUserProfile();
     setLoading(false);
   };
@@ -66,7 +74,7 @@ export default function ReminderCard() {
       const docSnap = await getDoc(docRef);
       setProfileData(docSnap.data());
       if (docSnap.exists()) {
-        console.log("Reminder data:", docSnap.data());
+        // console.log("Reminder data:", docSnap.data());
         setLoading(false);
       } else {
         // doc.data() will be undefined in this case
@@ -82,6 +90,51 @@ export default function ReminderCard() {
   useEffect(() => {
     getUserProfile();
   }, []);
+
+  // use effect to schedule user notification
+  useEffect(() => {
+    console.log("PROFILE DATAAA", profileData);
+    if (profileData?.reminder) {
+      if (profileData.reminder_morning) {
+        scheduleReminderMorning();
+      }
+      if (profileData.reminder_night) {
+        scheduleReminderNight();
+      }
+    }
+  }, [profileData]);
+
+  useEffect(() => {
+    if (!profileData?.reminder) {
+      cancelAllNotifications();
+    }
+  }, [profileData]);
+
+  const scheduleReminderMorning = async () => {
+    const streakArray = profileData?.streak;
+    const streak = summary(streakArray)?.currentStreak;
+    const user = auth?.currentUser?.displayName;
+    try {
+      let { hour, minutes } = getHoursMinutes(profileData?.reminder_morning);
+      const id = await schedulePushNotification(hour, minutes, streak, user);
+      // setMorningId(id);
+    } catch (error) {
+      Alert.alert(error);
+    }
+  };
+
+  const scheduleReminderNight = async () => {
+    const streakArray = profileData?.streak;
+    const streak = summary(streakArray)?.currentStreak;
+    const user = auth?.currentUser?.displayName;
+    try {
+      let { hour, minutes } = getHoursMinutes(profileData?.reminder_night);
+      const id = await schedulePushNotification(hour, minutes, streak, user);
+      // setNightId(id);
+    } catch (error) {
+      Alert.alert(error);
+    }
+  };
 
   const handleVisibleDatePicker = (current) => {
     setDatePickerVisibility((prev) => {
@@ -106,13 +159,15 @@ export default function ReminderCard() {
   return (
     <View style={styles.container}>
       <Spinner visible={loading} cancelable={false} />
-      <HomeCard height={170} background={"#FEF6E5"}>
+      <HomeCard height={160} background={"#C8988F"}>
         <View style={styles.row}>
           <Text style={styles.header}>Reminder</Text>
 
           <Switch
             trackColor={{ false: "#e5e5e5", true: "#e5e5e5" }}
-            thumbColor={profileInfo.checked ? "#59b2ab" : "#f4f3f4"}
+            thumbColor={
+              profileInfo.checked ? "rgba(253, 86, 85, 0.8)" : "#f4f3f4"
+            }
             ios_backgroundColor="#3e3e3e"
             onValueChange={updateReminder}
             value={profileInfo.checked}
@@ -157,7 +212,7 @@ export default function ReminderCard() {
           </>
         ) : (
           <View style={{ alignItems: "center", marginTop: 10 }}>
-            <MaterialCommunityIcons name="alarm-off" color={"#000"} size={50} />
+            <MaterialCommunityIcons name="alarm-off" color={"#fff"} size={50} />
             <Text style={styles.timer}>Reminder off</Text>
           </View>
         )}
@@ -181,20 +236,22 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#000",
+    color: "#fff",
+    fontFamily: "Poppings-Bold",
   },
   displayText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 16,
     fontWeight: "600",
     fontFamily: "Poppings-Light",
   },
   text: {
-    color: "#000",
+    color: "#fff",
   },
   timer: {
-    color: "#000",
+    color: "#fff",
     fontSize: 17,
     fontWeight: "600",
+    fontFamily: "Poppings-Bold",
   },
 });

@@ -5,30 +5,20 @@ import {
   ScrollView,
   View,
   Alert,
+  Platform,
+  RefreshControl,
 } from "react-native";
 import { Avatar, Button } from "@rneui/themed";
 import { auth, db, doc, getDoc } from "../firebase";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import ReminderCard from "../components/ReminderCard";
 import SkinInfoCard from "../components/SkinInfoCard";
-import { LogBox } from "react-native";
 import RecommendModal from "../components/modals/RecommendModal";
-import { summary } from "date-streaks";
-import moment from "moment";
+import * as Notifications from "expo-notifications";
+import Notification from "../utils/Notification";
+import { StatusBar } from "expo-status-bar";
 
-LogBox.ignoreLogs([
-  "Warning: Async Storage has been extracted from react-native core",
-]);
-
-const handleSendNotification = () => {
-  return;
-};
-
-const handleSetTheAlarm = () => {
-  return;
-};
-
-export const HomePage = ({ navigation }) => {
+export const HomePage = memo(({ navigation }) => {
   const user = auth.currentUser;
   const { displayName, photoURL } = user;
   const [username, setUser] = useState(displayName);
@@ -36,6 +26,16 @@ export const HomePage = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [reload, setReload] = useState(false);
   const [products, setProducts] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Set notification options
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
 
   const productsMemo = useMemo(() => {
     return {
@@ -64,10 +64,7 @@ export const HomePage = ({ navigation }) => {
       toggleOverlay();
     } else {
       // toggleOverlay();
-      navigation.navigate("Routine", {
-        reload: reload,
-        setReload: setReload,
-      });
+      navigation.navigate("Routine");
     }
   };
 
@@ -84,6 +81,7 @@ export const HomePage = ({ navigation }) => {
 
   // Get product details
   const getUserProducts = async () => {
+    setLoading(true);
     const docRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
 
     try {
@@ -91,20 +89,26 @@ export const HomePage = ({ navigation }) => {
         .then((docSnap) => {
           if (docSnap.exists()) {
             setProducts(docSnap.data());
+            setLoading(false);
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");
+            setLoading(false);
           }
         })
         .catch((error) => {
           console.log(error);
+          setLoading(false);
         });
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   return (
     <View style={styles.wrapper}>
+      <StatusBar style="dark" />
+      <Notification />
       <RecommendModal
         visible={visible}
         toggleOverlay={toggleOverlay}
@@ -114,6 +118,9 @@ export const HomePage = ({ navigation }) => {
         reload={reload}
       />
       <View style={styles.avatarView}>
+        <Text style={styles.header}>
+          Hello, {username ? username : "Buddy"}
+        </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           {avatar ? (
             <Avatar
@@ -141,17 +148,15 @@ export const HomePage = ({ navigation }) => {
           )}
         </TouchableOpacity>
       </View>
-      <Text style={styles.header}>Hi, {username ? username : "Buddy"}</Text>
       <ScrollView
         contentContainerStyle={styles.contentContainerStyle}
         style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={getUserProducts} />
+        }
       >
         <ReminderCard />
-        <SkinInfoCard
-          navigation={navigation}
-          reload={reload}
-          setReload={setReload}
-        />
+        <SkinInfoCard navigation={navigation} loading={loading} />
       </ScrollView>
       <View>
         <Button
@@ -159,10 +164,10 @@ export const HomePage = ({ navigation }) => {
           title="Start routine"
           onPress={handleRoutine}
           buttonStyle={{
-            backgroundColor: "#FD5655",
-            margin: 10,
-            height: 50,
-            borderRadius: 10,
+            backgroundColor: "rgba(253, 86, 85, 0.8)",
+            margin: Platform.OS === "android" ? 5 : 10,
+            height: Platform.OS === "android" ? 40 : 50,
+            borderRadius: Platform.OS === "android" ? 7 : 10,
             shadowColor: "#000",
             shadowOffset: {
               width: 0,
@@ -170,7 +175,7 @@ export const HomePage = ({ navigation }) => {
             },
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
-            elevation: 5,
+            elevation: 1,
           }}
           titleStyle={{
             fontFamily: "Poppings-Bold",
@@ -179,12 +184,12 @@ export const HomePage = ({ navigation }) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingTop: 30,
-    backgroundColor: "#E7EFF6",
+    paddingTop: 40,
+    backgroundColor: "#EADDD3",
     flex: 1,
   },
 
@@ -197,16 +202,19 @@ const styles = StyleSheet.create({
     maxHeight: 900,
   },
   avatarView: {
+    width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-end",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 10,
+    marginTop: 10,
   },
   header: {
     fontSize: 19,
     fontWeight: "bold",
     paddingLeft: 10,
-    paddingBottom: 10,
+    paddingBottom: 5,
     fontFamily: "Poppings-Bold",
   },
 });

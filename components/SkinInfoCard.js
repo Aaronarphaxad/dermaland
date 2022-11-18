@@ -6,7 +6,7 @@ import { auth, db, doc, getDoc } from "../firebase";
 import UpdateSkinInfoModal from "./modals/UpdateSkinInfoModal";
 import { summary } from "date-streaks";
 
-const SkinInfoCard = ({ navigation, reload, setReload }) => {
+const SkinInfoCard = ({ navigation, loading }) => {
   const [profile, setProfile] = useState(null);
   const [visible, setVisible] = useState(false);
   const [streak, setStreak] = useState([]);
@@ -31,7 +31,7 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
   useEffect(() => {
     getUserProfile();
     getStreak();
-  }, []);
+  }, [loading]);
 
   // Get user details
   const getUserProfile = async () => {
@@ -39,7 +39,7 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
     const docSnap = await getDoc(docRef);
     try {
       if (docSnap.exists()) {
-        console.log("Document SKIN data:", docSnap.data());
+        // console.log("Document SKIN data:", docSnap.data());
         setProfile(docSnap.data());
       } else {
         // doc.data() will be undefined in this case
@@ -60,9 +60,6 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
       const docSnap = await getDoc(docRef);
       const data = docSnap.data()?.streak;
       if (data.length > 0) {
-        // let arr = data.map((item) => item.toDate());
-        // let arrStrip = arr.map((item) => item.split("T")[0]);
-        // console.log(arrStrip);
         setStreak(summary(data)?.currentStreak);
         setReload(!reload);
       } else {
@@ -79,15 +76,8 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
   };
   return (
     <>
-      <HomeCard height={150} background={"#E3F5F4"}>
-        <UpdateSkinInfoModal
-          visible={visible}
-          toggleOverlay={toggleOverlay}
-          skinType={skinInfo.skinType}
-          sensitive={skinInfo.sensitive}
-          acne={skinInfo.acne}
-          pigmentation={skinInfo.pigmentation}
-        />
+      <HomeCard height={150} background={"#ADBDB5"}>
+        <UpdateSkinInfoModal visible={visible} toggleOverlay={toggleOverlay} />
         <View style={styles.container}>
           <View
             style={{
@@ -97,7 +87,12 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
             }}
           >
             <Text style={styles.header}>Skin info</Text>
-            <Icon onPress={toggleOverlay} type="fontawesome" name="settings" />
+            <Icon
+              onPress={toggleOverlay}
+              type="fontawesome"
+              name="settings"
+              color="#fff"
+            />
           </View>
           <View style={styles.row}>
             <View style={styles.column}>
@@ -135,7 +130,16 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
           justifyContent: "space-between",
         }}
       >
-        <HomeCard height={150} background={"#E9E7F8"} half>
+        <HomeCard
+          height={150}
+          background={"#C8988F"}
+          half
+          pressEvent={() => {
+            navigation.navigate("Streak", {
+              streak: profile?.streak,
+            });
+          }}
+        >
           <View style={styles.container2}>
             <Text style={styles.halfHeader}>Streak</Text>
             <Text style={styles.streakText}>{streak}</Text>
@@ -143,7 +147,7 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
         </HomeCard>
         <HomeCard
           height={150}
-          background={"#E9E7F8"}
+          background={"#ADBDB5"}
           half
           pressEvent={() =>
             navigation.navigate("Products", {
@@ -156,8 +160,8 @@ const SkinInfoCard = ({ navigation, reload, setReload }) => {
           <View style={styles.container2}>
             <Text style={styles.halfHeader}>Products</Text>
             <Image
-              source={require("../assets/images/products.png")}
-              style={{ marginTop: 10 }}
+              source={require("../assets/images/droplet.png")}
+              style={{ marginTop: 10, height: 50 }}
             />
           </View>
         </HomeCard>
@@ -185,19 +189,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
-    paddingLeft: 7,
   },
   header: {
     fontSize: 20,
     fontWeight: "700",
     marginBottom: 10,
-    color: "#51BFBD",
+    color: "#fff",
   },
   displayText: {
-    color: "#000",
-    fontSize: 16,
+    color: "#fff",
+    fontSize: 15,
     fontWeight: "600",
     fontFamily: "Poppings-Light",
+    textAlign: "left",
   },
   column: {
     height: 50,
@@ -205,7 +209,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
-    margin: 3,
+    marginRight: 10,
+    textAlign: "left",
   },
   bold: {
     fontFamily: "Poppings-Bold",
@@ -213,11 +218,13 @@ const styles = StyleSheet.create({
   halfHeader: {
     fontFamily: "Poppings-Bold",
     fontSize: 18,
+    color: "#fff",
   },
   streakText: {
     fontSize: 50,
     fontFamily: "Poppings-Black",
     marginTop: 10,
+    color: "#fff",
   },
 });
 

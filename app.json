@@ -4,12 +4,19 @@
     "slug": "dermaland",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo-sample.png",
+    "icon": "./assets/icon.png",
     "userPoppingsfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/logo-sample.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#fff"
+      "backgroundColor": "#EADDD3"
+    },
+    "notification": {
+      "icon": "./assets/notif_icon_grayscale.png",
+      "color": "#000000",
+      "androidMode": "default",
+      "iosDisplayInForeground": true,
+      "androidCollapsedTitle": "Reminder from Dermaland"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,8 +28,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#EADDD3"
+      },
+      "permissions": ["RECEIVE_BOOT_COMPLETED"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,7 +39,16 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "The app accesses your photos to let you change your profile photo.",
+          "sounds": ["./assets/sound/dermaland-magic-notification-ring.wav"]
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notif_icon_grayscale.png",
+          "color": "#000000",
+          "sounds": ["./assets/sound/dermaland-magic-notification-ring.wav"]
         }
       ]
     ]

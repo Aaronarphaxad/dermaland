@@ -7,7 +7,6 @@ import {
   Alert,
 } from "react-native";
 import { Button, Input } from "@rneui/themed";
-import logo from "../assets/logo-sample.png";
 import { useState } from "react";
 import { auth, signIn } from "../firebase";
 
@@ -15,11 +14,6 @@ export const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const clearInputs = () => {
-    setEmail("");
-    setPassword("");
-  };
 
   const signInWithEmail = () => {
     setLoading(true);
@@ -48,11 +42,13 @@ export const LoginPage = ({ navigation }) => {
   return (
     <View style={styles.containerMain}>
       <View style={styles.topView}>
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Dermaland</Text>
-        <Image source={logo} />
+        <Image
+          source={require("../assets/derma_auth.png")}
+          style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+        />
       </View>
       <View style={styles.container}>
-        <Text style={styles.header}>Welcome back, jump right in 🤸‍♀️</Text>
+        <Text style={styles.header}>Welcome, jump right in 🤸‍♀️</Text>
 
         <Input
           style={{ fontSize: 16 }}
@@ -75,15 +71,6 @@ export const LoginPage = ({ navigation }) => {
           <Text style={styles.forgotPassword}>Forgot password?</Text>
         </TouchableOpacity>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          {/* <TouchableOpacity
-            onPress={() => signInWithEmail()}
-            style={styles.button}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Signing in..." : "Sign in"}
-            </Text>
-          </TouchableOpacity> */}
           <Button
             title="Sign in"
             onPress={() => signInWithEmail()}

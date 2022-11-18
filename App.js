@@ -4,9 +4,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RootNavigation from "./navigation";
 import { useFonts } from "expo-font";
+import { useEffect, useCallback } from "react";
 
-const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+// const Stack = createNativeStackNavigator();
+// const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,5 +16,10 @@ export default function App() {
     "Poppings-Light": require("./assets/fonts/Poppins/Poppins-Light.ttf"),
     "Poppings-ExtraBold": require("./assets/fonts/Poppins/Poppins-ExtraBold.ttf"),
   });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return <RootNavigation />;
 }
