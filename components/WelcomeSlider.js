@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   text: {
     color: "rgba(255, 255, 255, 1)",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     fontFamily: "Poppings-Light",
   },
@@ -52,9 +52,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 15,
+    height: 15,
+    borderRadius: 10,
     marginHorizontal: 4,
   },
   buttonContainer: {
@@ -117,7 +117,7 @@ const RenderPagination = ({ activeIndex, slider, data, onIntroCompleted }) => {
           <View style={styles.buttonContainer}>
             <Pressable
               onPress={() => handleIntroCompleted("Sign In")}
-              style={[styles.button, { backgroundColor: "#59b2ab" }]}
+              style={[styles.button, { backgroundColor: "#183950" }]}
             >
               <Text style={styles.buttonText}>Log in</Text>
             </Pressable>

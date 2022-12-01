@@ -6,7 +6,7 @@ import {
   View,
   Alert,
 } from "react-native";
-import { Input } from "@rneui/themed";
+import { Button, Input } from "@rneui/themed";
 import { useState } from "react";
 import { auth, sendResetPassword } from "../firebase";
 
@@ -15,6 +15,10 @@ export const ForgotPassword = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const resetPassword = () => {
+    if (!email) {
+      Alert.alert("Enter email");
+      return;
+    }
     setLoading(true);
     sendResetPassword(auth, email)
       .then(() => {
@@ -33,14 +37,14 @@ export const ForgotPassword = ({ navigation }) => {
       <View style={styles.topView}>
         <Image
           source={require("../assets/derma_auth.png")}
-          style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+          style={{ resizeMode: "contain", height: 80, marginTop: 40 }}
         />
       </View>
       <View style={styles.container}>
         <Text style={styles.header}>Change your password</Text>
 
         <Input
-          style={{ fontSize: 16 }}
+          style={{ fontSize: 16, height: 45 }}
           onChangeText={(newText) => setEmail(newText)}
           defaultValue={email}
           placeholder="Email"
@@ -48,15 +52,29 @@ export const ForgotPassword = ({ navigation }) => {
         />
 
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <TouchableOpacity
+          <Button
+            title="Send reset link"
             onPress={() => resetPassword()}
-            style={styles.button}
             disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Sending..." : "Send reset link"}
-            </Text>
-          </TouchableOpacity>
+            loading={loading}
+            loadingProps={{
+              size: "small",
+              color: "#183950",
+            }}
+            titleStyle={{ fontWeight: "500", color: "#fff" }}
+            buttonStyle={{
+              backgroundColor: "#183950",
+              borderColor: "transparent",
+              borderWidth: 0,
+              borderRadius: 8,
+              paddingVertical: 15,
+            }}
+            containerStyle={{
+              width: 200,
+              marginHorizontal: 50,
+              marginVertical: 15,
+            }}
+          />
           <TouchableOpacity onPress={() => navigation.navigate("Sign In")}>
             <Text style={styles.underline}>Back to Sign in</Text>
           </TouchableOpacity>
@@ -70,7 +88,7 @@ const styles = StyleSheet.create({
   containerMain: {
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     justifyContent: "space-between",
     height: "100%",
     width: "100%",
@@ -115,7 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     height: 45,
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     borderColor: "grey",
     color: "#fff",
     alignItems: "center",

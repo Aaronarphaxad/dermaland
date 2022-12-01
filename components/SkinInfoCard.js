@@ -5,6 +5,7 @@ import { useState, useMemo, useEffect } from "react";
 import { auth, db, doc, getDoc } from "../firebase";
 import UpdateSkinInfoModal from "./modals/UpdateSkinInfoModal";
 import { summary } from "date-streaks";
+import moment from "moment";
 
 const SkinInfoCard = ({ navigation, loading }) => {
   const [profile, setProfile] = useState(null);
@@ -60,7 +61,8 @@ const SkinInfoCard = ({ navigation, loading }) => {
       const docSnap = await getDoc(docRef);
       const data = docSnap.data()?.streak;
       if (data.length > 0) {
-        setStreak(summary(data)?.currentStreak);
+        const streakFormat = data.map((d) => moment(d, "MM-DD-YYYY").toDate());
+        setStreak(summary(streakFormat)?.currentStreak);
         setReload(!reload);
       } else {
         setStreak(summary(data)?.currentStreak);
@@ -76,7 +78,7 @@ const SkinInfoCard = ({ navigation, loading }) => {
   };
   return (
     <>
-      <HomeCard height={150} background={"#ADBDB5"}>
+      <HomeCard height={150} background={"#183950"}>
         <UpdateSkinInfoModal visible={visible} toggleOverlay={toggleOverlay} />
         <View style={styles.container}>
           <View
@@ -132,7 +134,7 @@ const SkinInfoCard = ({ navigation, loading }) => {
       >
         <HomeCard
           height={150}
-          background={"#C8988F"}
+          background={"#183950"}
           half
           pressEvent={() => {
             navigation.navigate("Streak", {
@@ -147,7 +149,7 @@ const SkinInfoCard = ({ navigation, loading }) => {
         </HomeCard>
         <HomeCard
           height={150}
-          background={"#ADBDB5"}
+          background={"#183950"}
           half
           pressEvent={() =>
             navigation.navigate("Products", {

@@ -58,14 +58,7 @@ export const HomePage = memo(({ navigation }) => {
   };
 
   const handleRoutine = () => {
-    let morning = productsMemo.morning;
-    let night = productsMemo.night;
-    if (morning.length === 0 && night.length === 0) {
-      toggleOverlay();
-    } else {
-      // toggleOverlay();
-      navigation.navigate("Routine");
-    }
+    navigation.navigate("Routine");
   };
 
   useEffect(() => {
@@ -98,16 +91,18 @@ export const HomePage = memo(({ navigation }) => {
         })
         .catch((error) => {
           console.log(error);
+          Alert.alert(error.message);
           setLoading(false);
         });
     } catch (error) {
       console.log(error);
+      Alert.alert(error.message);
       setLoading(false);
     }
   };
   return (
     <View style={styles.wrapper}>
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
       <Notification />
       <RecommendModal
         visible={visible}
@@ -164,7 +159,7 @@ export const HomePage = memo(({ navigation }) => {
           title="Start routine"
           onPress={handleRoutine}
           buttonStyle={{
-            backgroundColor: "rgba(253, 86, 85, 0.8)",
+            backgroundColor: "rgba(253, 86, 85, 0.9)",
             margin: Platform.OS === "android" ? 5 : 10,
             height: Platform.OS === "android" ? 40 : 50,
             borderRadius: Platform.OS === "android" ? 7 : 10,
@@ -189,7 +184,7 @@ export const HomePage = memo(({ navigation }) => {
 const styles = StyleSheet.create({
   wrapper: {
     paddingTop: 40,
-    backgroundColor: "#EADDD3",
+    backgroundColor: "#D9D9D9",
     flex: 1,
   },
 

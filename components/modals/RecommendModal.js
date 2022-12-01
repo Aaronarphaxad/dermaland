@@ -107,7 +107,7 @@ export default function RecommendModal({
         />
         <CheckBox
           center
-          checkedColor="#59b2ab"
+          checkedColor="#183950"
           title="Sensitive"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
@@ -116,7 +116,7 @@ export default function RecommendModal({
         />
         <CheckBox
           center
-          checkedColor="#59b2ab"
+          checkedColor="#183950"
           title="Acne"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
@@ -125,7 +125,7 @@ export default function RecommendModal({
         />
         <CheckBox
           center
-          checkedColor="#59b2ab"
+          checkedColor="#183950"
           title="Dyspigmentation"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"

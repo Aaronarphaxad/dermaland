@@ -1,9 +1,9 @@
 export const introData = [
   {
-    title: "Hi!",
-    text: "Welcome to Dermaland, your skin care buddy",
+    title: "Hello",
+    text: "Welcome to Dermaland, your personal skin care app",
     image: require("../assets/product.jpg"),
-    bg: "#59b2ab",
+    bg: "#183950",
   },
   {
     title: "Daily reminder",

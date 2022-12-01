@@ -1,19 +1,19 @@
 {
   "expo": {
-    "name": "dermaland",
+    "name": "Dermaland",
     "slug": "dermaland",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userPoppingsfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#EADDD3"
+      "backgroundColor": "#D9D9D9"
     },
+    "jsEngine": "hermes",
     "notification": {
       "icon": "./assets/notif_icon_grayscale.png",
-      "color": "#000000",
+      "color": "#183950",
       "androidMode": "default",
       "iosDisplayInForeground": true,
       "androidCollapsedTitle": "Reminder from Dermaland"
@@ -23,14 +23,20 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arphaxad09.dermaland"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#EADDD3"
+        "backgroundColor": "#D9D9D9"
       },
-      "permissions": ["RECEIVE_BOOT_COMPLETED"]
+      "permissions": [
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.arphaxad09.dermaland",
+      "versionCode": 7
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,18 +45,29 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you change your profile photo.",
-          "sounds": ["./assets/sound/dermaland-magic-notification-ring.wav"]
+          "photosPermission": "The app accesses your photos to let you change your profile photo."
         }
       ],
       [
         "expo-notifications",
         {
           "icon": "./assets/notif_icon_grayscale.png",
-          "color": "#000000",
-          "sounds": ["./assets/sound/dermaland-magic-notification-ring.wav"]
+          "color": "#000000"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true
+          }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4164a036-db73-4d13-bb77-e6dfa1e4344d"
+      }
+    }
   }
 }

@@ -18,9 +18,21 @@ export default function AuthStack() {
           options={{ headerShown: false }}
           component={WelcomeSlider}
         />
-        <Stack.Screen name="Sign Up" component={RegisterPage} />
-        <Stack.Screen name="Sign In" component={LoginPage} />
-        <Stack.Screen name="Forgot Password" component={ForgotPassword} />
+        <Stack.Screen
+          name="Sign Up"
+          options={{ headerShown: false }}
+          component={RegisterPage}
+        />
+        <Stack.Screen
+          name="Sign In"
+          options={{ headerShown: false }}
+          component={LoginPage}
+        />
+        <Stack.Screen
+          name="Forgot Password"
+          options={{ headerShown: false }}
+          component={ForgotPassword}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

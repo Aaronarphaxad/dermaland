@@ -13,6 +13,7 @@ import { Button, Icon, ListItem } from "@rneui/themed";
 import { SelectedProduct } from "../components/SelectedProducts";
 import Spinner from "react-native-loading-spinner-overlay";
 import { getRandomImg } from "../utils/helpers";
+import { StatusBar } from "expo-status-bar";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
@@ -50,7 +51,6 @@ export default function RoutineScreen({ navigation }) {
   //   use effect to get user profile
   useEffect(() => {
     getUserProfile();
-    getStreak();
   }, []);
 
   // Get user details
@@ -80,7 +80,7 @@ export default function RoutineScreen({ navigation }) {
       profileInfo.productsMorning.length === 0 ||
       profileInfo.productsNight.length === 0
     ) {
-      Alert.alert("Add day/night products to start routine");
+      Alert.alert("Add day & night products to start routine");
       return;
     }
     if (index === 1) {
@@ -104,30 +104,6 @@ export default function RoutineScreen({ navigation }) {
         imageUrl: profileInfo?.getImage(),
         setProducts: setNight,
       });
-    }
-  };
-
-  // Get user streak
-  const getStreak = async () => {
-    const docRef = doc(db, "profiles", `${auth?.currentUser?.uid}`);
-    try {
-      // setLoading(true);
-      const docSnap = await getDoc(docRef);
-      const data = docSnap.data()?.streak;
-      if (data.length > 0) {
-      } else {
-        // setStreak(docSnap.data()?.streak[0].toDate());
-      }
-      if (docSnap.exists()) {
-        // console.log("Document streak:", docSnap.data()?.streak);
-        // setLoading(false);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-        // setLoading(false);
-      }
-    } catch (error) {
-      // setLoading(false);
     }
   };
 
@@ -157,7 +133,7 @@ export default function RoutineScreen({ navigation }) {
           <Text style={styles.tabText}>Night</Text>
         </TouchableOpacity>
       </View>
-      <Text style={{ marginTop: 10, marginBottom: 10 }}>
+      <Text style={{ marginTop: 10, marginBottom: 10, fontSize: 16 }}>
         Click + to select products for routine:
       </Text>
       {index === 1 && (
@@ -228,7 +204,7 @@ export default function RoutineScreen({ navigation }) {
           </ScrollView>
         </>
       )}
-      <View>
+      <View style={{ paddingBottom: 10 }}>
         <Button
           type="solid"
           title="Start"
@@ -250,9 +226,9 @@ export default function RoutineScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: 20,
     padding: 10,
-    backgroundColor: "#EADDD3",
+    backgroundColor: "#D9D9D9",
     flex: 1,
   },
   row: {

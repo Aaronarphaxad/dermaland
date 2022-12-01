@@ -13,7 +13,7 @@ export default function DeleteUserModal({ visible, toggleDialog, deleteUser }) {
             <Button
               onPress={toggleDialog}
               title="No"
-              buttonStyle={[styles.button, { backgroundColor: "#59b2ab" }]}
+              buttonStyle={[styles.button, { backgroundColor: "#183950" }]}
               titleStyle={{
                 fontFamily: "Poppings-Bold",
                 fontSize: 16,

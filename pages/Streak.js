@@ -1,24 +1,26 @@
 import { summary } from "date-streaks";
+import moment from "moment";
 import { View, Text, StyleSheet } from "react-native";
 import HomeCard from "../components/Card";
 
 export const StreakScreen = ({ route }) => {
   const { streak } = route.params;
+  const streakFormat = streak.map((d) => moment(d, "MM-DD-YYYY").toDate());
   const { currentStreak, todayInStreak, longestStreak, withinCurrentStreak } =
-    summary(streak);
+    summary(streakFormat);
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Streak record</Text>
 
       <View style={styles.row}>
-        <HomeCard half background="#C8988F" height={120}>
+        <HomeCard half background="#183950" height={120}>
           <View style={styles.column}>
             <Text style={styles.text}>Current Streak</Text>
             <Text style={styles.text2}>{currentStreak}</Text>
           </View>
         </HomeCard>
-        <HomeCard half background="#ADBDB5" height={120}>
+        <HomeCard half background="#183950" height={120}>
           <View style={styles.column}>
             <Text style={styles.text}>Today in streak?</Text>
             <Text style={styles.text3}>{todayInStreak ? "Yes" : "No"}</Text>
@@ -26,7 +28,7 @@ export const StreakScreen = ({ route }) => {
         </HomeCard>
       </View>
       <View style={styles.row}>
-        <HomeCard half background="#ADBDB5" height={120}>
+        <HomeCard half background="#183950" height={120}>
           <View style={styles.column}>
             <Text style={styles.text}>Longest streak</Text>
             <Text style={styles.text2}>
@@ -34,7 +36,7 @@ export const StreakScreen = ({ route }) => {
             </Text>
           </View>
         </HomeCard>
-        <HomeCard half background="#C8988F" height={120}>
+        <HomeCard half background="#183950" height={120}>
           <View style={styles.column}>
             <Text style={styles.text}>Within current streak</Text>
             <Text style={styles.text3}>
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    backgroundColor: "#EADDD3",
+    backgroundColor: "#D9D9D9",
   },
   row: {
     display: "flex",

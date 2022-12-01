@@ -40,7 +40,7 @@ export const LearnPage = ({ navigation }) => {
         resizeMode={"stretch"}
         style={styles.imgBackground}
         source={{
-          uri: "https://res.cloudinary.com/gifts-paddy/image/upload/v1668017273/dermaland/water_pejxqq.jpg",
+          uri: "https://res.cloudinary.com/gifts-paddy/image/upload/v1668948784/dermaland/IMG_2399_mlhsaz.jpg",
         }}
       >
         <Text style={styles.name}>Skin care pocket guide</Text>

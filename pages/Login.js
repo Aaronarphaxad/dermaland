@@ -44,21 +44,21 @@ export const LoginPage = ({ navigation }) => {
       <View style={styles.topView}>
         <Image
           source={require("../assets/derma_auth.png")}
-          style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+          style={{ resizeMode: "contain", height: 80, marginTop: 40 }}
         />
       </View>
       <View style={styles.container}>
         <Text style={styles.header}>Welcome, jump right in 🤸‍♀️</Text>
 
         <Input
-          style={{ fontSize: 16 }}
+          style={{ fontSize: 16, height: 45 }}
           onChangeText={(newText) => setEmail(newText)}
           defaultValue={email}
           placeholder="Email"
           autoCapitalize={"none"}
         />
         <Input
-          style={{ fontSize: 16 }}
+          style={{ fontSize: 16, height: 45 }}
           onChangeText={(newText) => setPassword(newText)}
           defaultValue={password}
           secureTextEntry={true}
@@ -78,11 +78,11 @@ export const LoginPage = ({ navigation }) => {
             loading={loading}
             loadingProps={{
               size: "small",
-              color: "#59b2ab",
+              color: "#183950",
             }}
             titleStyle={{ fontWeight: "500", color: "#fff" }}
             buttonStyle={{
-              backgroundColor: "#59b2ab",
+              backgroundColor: "#183950",
               borderColor: "transparent",
               borderWidth: 0,
               borderRadius: 8,
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   containerMain: {
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     justifyContent: "space-between",
     height: "100%",
     width: "100%",
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     height: 45,
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     borderColor: "grey",
     color: "#fff",
     alignItems: "center",
@@ -165,8 +165,10 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     textAlign: "right",
-    margin: 10,
+    marginHorizontal: 10,
     textDecorationLine: "underline",
+    lineHeight: 40,
+    width: "auto",
   },
   underline: {
     textDecorationLine: "underline",

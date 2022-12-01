@@ -35,44 +35,6 @@ export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
     }
   };
 
-  const handleRecommend = () => {
-    setLoading(true);
-    let obj = {
-      type: check1 ? check1 : "Normal",
-      sensitive: check2 === true || false ? check2 : false,
-      acne: check3 === true || false ? check3 : false,
-      pigmentation: check4 === true || false ? check4 : false,
-    };
-    // console.log(obj);
-    console.log(productsGenerator(obj));
-    let generatedProducts = productsGenerator(obj);
-    let morning = generatedProducts?.morning;
-    let night = generatedProducts?.night;
-    try {
-      updateDoc(profileRef, {
-        skin_type: check1 === "N/A" ? "Normal" : check1,
-        sensitive: check2 === true || false ? check2 : false,
-        acne: check3 === true || false ? check3 : false,
-        hyperpigmentation: check4 === true || false ? check4 : false,
-        products_morning: morning,
-        products_night: night,
-      })
-        .then(() => {
-          setLoading(false);
-          toggleOverlay();
-          Alert.alert("Recommended products added to products list");
-        })
-        .catch((error) => {
-          setLoading(false);
-          Alert.alert(error.message);
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
   return (
     <Overlay
       overlayStyle={{ width: "90%", borderRadius: 10 }}
@@ -98,7 +60,7 @@ export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
       />
       <CheckBox
         center
-        checkedColor="#59b2ab"
+        checkedColor="#183950"
         title="Sensitive"
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
@@ -108,7 +70,7 @@ export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
       />
       <CheckBox
         center
-        checkedColor="#59b2ab"
+        checkedColor="#183950"
         title="Acne"
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
@@ -118,7 +80,7 @@ export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
       />
       <CheckBox
         center
-        checkedColor="#59b2ab"
+        checkedColor="#183950"
         title="Dyspigmentation"
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
@@ -128,15 +90,12 @@ export default function UpdateSkinInfoModal({ visible, toggleOverlay }) {
       />
       <Button
         buttonStyle={[
-          { backgroundColor: "#59b2ab", borderRadius: 10 },
+          { backgroundColor: "#183950", borderRadius: 10 },
           styles.header,
         ]}
         onPress={() => handleUpdate()}
         title="Update"
       />
-      <TouchableOpacity onPress={handleRecommend} style={styles.recommend}>
-        <Text style={styles.recommendText}>Get product recommendation</Text>
-      </TouchableOpacity>
     </Overlay>
   );
 }

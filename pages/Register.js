@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
-  SafeAreaView,
   Alert,
 } from "react-native";
 import { Button, Input } from "@rneui/themed";
@@ -100,10 +99,12 @@ export const RegisterPage = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.scrollView}>
+    <View style={styles.scrollView}>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
           justifyContent: "space-between",
         }}
         style={styles.containerMain}
@@ -111,7 +112,7 @@ export const RegisterPage = ({ navigation }) => {
         <View style={styles.topView}>
           <Image
             source={require("../assets/derma_auth.png")}
-            style={{ resizeMode: "contain", height: 100, marginTop: 20 }}
+            style={{ resizeMode: "contain", height: 80, marginTop: 20 }}
           />
         </View>
         <View style={styles.container}>
@@ -125,14 +126,14 @@ export const RegisterPage = ({ navigation }) => {
             placeholder="Username"
           />
           <Input
-            style={{ fontSize: 16 }}
+            style={{ fontSize: 16, height: 40 }}
             onChangeText={(newText) => setEmail(newText)}
             defaultValue={email}
             autoCapitalize={"none"}
             placeholder="Email"
           />
           <Input
-            style={{ fontSize: 16 }}
+            style={{ fontSize: 16, height: 40 }}
             onChangeText={(newText) => setPassword(newText)}
             defaultValue={password}
             secureTextEntry={true}
@@ -140,7 +141,7 @@ export const RegisterPage = ({ navigation }) => {
             placeholder="Password"
           />
           <Input
-            style={{ fontSize: 16 }}
+            style={{ fontSize: 16, height: 40 }}
             onChangeText={(newText) => setConfirmPassword(newText)}
             defaultValue={confirmPassword}
             secureTextEntry={true}
@@ -158,11 +159,11 @@ export const RegisterPage = ({ navigation }) => {
               loading={loading}
               loadingProps={{
                 size: "small",
-                color: "#59b2ab",
+                color: "#183950",
               }}
               titleStyle={{ fontWeight: "500", color: "#fff" }}
               buttonStyle={{
-                backgroundColor: "#59b2ab",
+                backgroundColor: "#183950",
                 borderColor: "transparent",
                 borderWidth: 0,
                 borderRadius: 8,
@@ -183,18 +184,18 @@ export const RegisterPage = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    // height: 900,
+    backgroundColor: "#183950",
+    paddingTop: 40,
   },
   containerMain: {
-    display: "flex",
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     height: "100%",
     width: "100%",
   },
@@ -204,17 +205,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     display: "flex",
     alignItems: "center",
-    paddingTop: 20,
+    // paddingTop: 20,
     marginBottom: 50,
-  },
-  regView: {
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 20,
-    marginTop: 40,
-    flexGrow: 1,
-    // justifyContent: "flex-end",
   },
   container: {
     display: "flex",
@@ -223,10 +215,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     width: "100%",
+    height: "90%",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    justifyContent: "flex-end",
-    paddingBottom: 20,
+    /* Padding the bottom of the container. */
+    // paddingBottom: 20,
   },
   header: {
     fontSize: 15,
@@ -247,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     height: 45,
-    backgroundColor: "#59b2ab",
+    backgroundColor: "#183950",
     borderColor: "grey",
     color: "#fff",
     // alignItems: "center",
@@ -266,17 +259,6 @@ const styles = StyleSheet.create({
   underline: {
     textDecorationLine: "underline",
     textAlign: "center",
-  },
-  googleView: {
-    display: "flex",
-    width: "100%",
-    height: 45,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "grey",
+    lineHeight: 30,
   },
 });

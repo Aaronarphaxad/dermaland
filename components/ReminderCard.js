@@ -11,6 +11,7 @@ import {
 } from "../utils/Notification";
 import { getHoursMinutes } from "../utils/helpers";
 import { summary } from "date-streaks";
+import moment from "moment";
 
 export default function ReminderCard() {
   /**
@@ -112,7 +113,10 @@ export default function ReminderCard() {
 
   const scheduleReminderMorning = async () => {
     const streakArray = profileData?.streak;
-    const streak = summary(streakArray)?.currentStreak;
+    const streakFormat = streakArray?.map((d) =>
+      moment(d, "MM-DD-YYYY").toDate()
+    );
+    const streak = summary(streakFormat)?.currentStreak;
     const user = auth?.currentUser?.displayName;
     try {
       let { hour, minutes } = getHoursMinutes(profileData?.reminder_morning);
@@ -125,7 +129,10 @@ export default function ReminderCard() {
 
   const scheduleReminderNight = async () => {
     const streakArray = profileData?.streak;
-    const streak = summary(streakArray)?.currentStreak;
+    const streakFormat = streakArray?.map((d) =>
+      moment(d, "MM-DD-YYYY").toDate()
+    );
+    const streak = summary(streakFormat)?.currentStreak;
     const user = auth?.currentUser?.displayName;
     try {
       let { hour, minutes } = getHoursMinutes(profileData?.reminder_night);
@@ -159,15 +166,13 @@ export default function ReminderCard() {
   return (
     <View style={styles.container}>
       <Spinner visible={loading} cancelable={false} />
-      <HomeCard height={160} background={"#C8988F"}>
+      <HomeCard height={160} background={"#183950"}>
         <View style={styles.row}>
           <Text style={styles.header}>Reminder</Text>
 
           <Switch
             trackColor={{ false: "#e5e5e5", true: "#e5e5e5" }}
-            thumbColor={
-              profileInfo.checked ? "rgba(253, 86, 85, 0.8)" : "#f4f3f4"
-            }
+            thumbColor={profileInfo.checked ? "#183950" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={updateReminder}
             value={profileInfo.checked}

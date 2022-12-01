@@ -76,14 +76,14 @@ export default function ProductsPage({ route, navigation }) {
 
   const handleAddProductsM = () => {
     if (!inputValueM) return;
-    setProductListM((prev) => [...prev, inputValueM]);
+    setProductListM((prev) => [inputValueM, ...prev]);
     // getUserProfile();
     inputRef.current.clear();
     setCanUpdateM(false);
   };
   const handleAddProductsN = () => {
     if (!inputValueN) return;
-    setProductListN((prev) => [...prev, inputValueN]);
+    setProductListN((prev) => [inputValueN, ...prev]);
     // getUserProfile();
     inputRef2.current.clear();
     setCanUpdateN(false);
@@ -114,7 +114,7 @@ export default function ProductsPage({ route, navigation }) {
         <TouchableOpacity
           style={[
             styles.col,
-            { borderBottomColor: index === 1 ? "#59b2ab" : "#e5e5e5" },
+            { borderBottomColor: index === 1 ? "#183950" : "#e5e5e5" },
           ]}
           onPress={() => setIndex(1)}
         >
@@ -124,7 +124,7 @@ export default function ProductsPage({ route, navigation }) {
         <TouchableOpacity
           style={[
             styles.col,
-            { borderBottomColor: index === 2 ? "#59b2ab" : "#e5e5e5" },
+            { borderBottomColor: index === 2 ? "#183950" : "#e5e5e5" },
           ]}
           onPress={() => setIndex(2)}
         >
@@ -153,7 +153,7 @@ export default function ProductsPage({ route, navigation }) {
             </>
           ) : (
             <>
-              <ScrollView style={{ maxHeight: 300, marginBottom: 10 }}>
+              <ScrollView style={{ maxHeight: 270, marginBottom: 10 }}>
                 {productListMorning?.map((l, i) => (
                   <ListItem.Swipeable
                     rightContent={(reset) => (
@@ -202,14 +202,20 @@ export default function ProductsPage({ route, navigation }) {
               />
             }
           />
-          <Text style={{ marginBottom: 10, fontFamily: "Poppings-Light" }}>
-            Click the + button to add products to list
+          <Text
+            style={{
+              marginBottom: 10,
+              fontFamily: "Poppings-Bold",
+              fontSize: 16,
+            }}
+          >
+            Click + to add products and then update
           </Text>
           <Button
             title="Update Morning"
             onPress={() => handleUpdate("morning")}
             buttonStyle={{
-              backgroundColor: "#59b2ab",
+              backgroundColor: "#183950",
               borderRadius: 10,
             }}
             titleStyle={{
@@ -237,7 +243,7 @@ export default function ProductsPage({ route, navigation }) {
             </>
           ) : (
             <>
-              <ScrollView style={{ maxHeight: 300, marginBottom: 10 }}>
+              <ScrollView style={{ maxHeight: 270, marginBottom: 10 }}>
                 {productListNight?.map((l, i) => (
                   <ListItem.Swipeable
                     rightContent={(reset) => (
@@ -285,14 +291,20 @@ export default function ProductsPage({ route, navigation }) {
               />
             }
           />
-          <Text style={{ marginBottom: 10, fontFamily: "Poppings-Light" }}>
-            Click the + button to add products to list
+          <Text
+            style={{
+              marginBottom: 10,
+              fontFamily: "Poppings-Bold",
+              fontSize: 16,
+            }}
+          >
+            Click + to add products and then update
           </Text>
           <Button
             title="Update Night"
             onPress={() => handleUpdate("night")}
             buttonStyle={{
-              backgroundColor: "#59b2ab",
+              backgroundColor: "#183950",
               borderRadius: 10,
             }}
             titleStyle={{
@@ -312,7 +324,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     paddingTop: 30,
-    backgroundColor: "#EADDD3",
+    backgroundColor: "#D9D9D9",
   },
   row: {
     display: "flex",

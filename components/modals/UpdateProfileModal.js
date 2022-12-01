@@ -89,7 +89,9 @@ export const UpdateProfileModal = ({
             });
             console.log("URL TO SAVE", data.secure_url);
             setImage(data.secure_url);
-            setAvatar(data.secure_url);
+            if (data.secure_url) {
+              setAvatar(data.secure_url);
+            }
             setPreview("");
             setLoading(false);
             toggleOverlay();
@@ -162,7 +164,7 @@ export const UpdateProfileModal = ({
           style={{ fontFamily: "Poppings-Light" }}
         />
         <Button
-          buttonStyle={{ backgroundColor: "#59b2ab", borderRadius: 10 }}
+          buttonStyle={{ backgroundColor: "#183950", borderRadius: 10 }}
           onPress={() => handleUpdate()}
           title="Update"
           titleStyle={{ fontFamily: "Poppings-Bold" }}

@@ -6,6 +6,7 @@ import {
   RefreshControl,
   View,
   Alert,
+  Platform,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { Avatar, Switch, Button, Input } from "@rneui/themed";
@@ -171,8 +172,8 @@ const styles = StyleSheet.create({
   scrollView: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#EADDD3",
-    paddingTop: 20,
+    backgroundColor: "#D9D9D9",
+    paddingTop: Platform.OS === "android" ? 20 : 50,
     paddingBottom: 10,
   },
   container: {
@@ -209,6 +210,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Poppings-Light",
+    fontSize: 17,
   },
   row: {
     height: 50,
